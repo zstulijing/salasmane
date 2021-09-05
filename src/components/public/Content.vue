@@ -1,0 +1,23 @@
+<template>
+  <div class="content">
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Content'
+}
+</script>
+
+<style lang="less" scoped>
+  @navBarHeight: 60px;
+  @funBarWidth: 80px;
+
+  .content {
+
+    margin-top: @navBarHeight;
+    margin-left: @funBarWidth;
+    // background-color: #FAFAFA;
+  }
+</style>
