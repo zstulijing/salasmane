@@ -18,6 +18,6 @@ export default {
 
     margin-top: @navBarHeight;
     margin-left: @funBarWidth;
-    // background-color: #FAFAFA;
+
   }
 </style>

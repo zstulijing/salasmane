@@ -30,5 +30,5 @@ export default {
 <style lang="less">
   @import 'assets/css/normal.css';
   @import 'assets/css/reset.css';
-
+  @import 'assets/fonts/fonts.css';
 </style>

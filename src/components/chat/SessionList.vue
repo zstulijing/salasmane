@@ -94,11 +94,12 @@ export default {
 
 <style lang="less" scoped>
 
+  @sessionListWidth: 375px;
 
   .sessionList {
     position: fixed;
     height: 100%;
-    width: 375px;
+    width: @sessionListWidth;
     border-right: 1px solid #e7e7e7;
   }
   .search {
