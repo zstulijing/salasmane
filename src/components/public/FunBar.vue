@@ -23,13 +23,13 @@ export default {
 
 <style lang="less" scoped>
 
-  @navBarHeight: 60px;
-  @funBarWidth: 80px;
+  @navBarHeight: 40px;
+  @funBarWidth: 60px;
 
   .funbar {
     width: @funBarWidth;
     height: 100%;
-    position: fixed;
+    position: absolute;
     left: 0;
     top: @navBarHeight;
     z-index: 9;

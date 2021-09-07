@@ -4,18 +4,18 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 let Chat = () => import('views/Chat/Chat.vue')
-
+let Logon = () => import('views/Logon/Logon.vue')
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
   {
     path: '/chat',
     name: 'Chat',
     component: Chat
+  },
+  {
+    path: '/logon',
+    name: 'Logon',
+    component: Logon
   }
 ]
 
