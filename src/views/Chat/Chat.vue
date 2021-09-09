@@ -22,6 +22,12 @@ export default {
     NavBar,
     Content,
     ChatContent
+  },
+  beforeCreate () {
+    if (Object.keys(this.$store.state.profile).length === 0) {
+      alert('您尚未登录，即将返回登录界面')
+      this.$router.push('/logon')
+    }
   }
 }
 </script>

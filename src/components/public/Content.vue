@@ -11,8 +11,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  @navBarHeight: 60px;
-  @funBarWidth: 80px;
+  @navBarHeight: 40px;
+  @funBarWidth: 60px;
 
   .content {
 

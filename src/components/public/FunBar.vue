@@ -29,7 +29,7 @@ export default {
   .funbar {
     width: @funBarWidth;
     height: 100%;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: @navBarHeight;
     z-index: 9;
@@ -37,23 +37,23 @@ export default {
   }
 
   .photo {
-    padding: 0 15px;
+    padding: 0 10px;
     margin: 20px 0 ;
     img {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border-radius: 5px;
       float: left;
     }
   }
 
   .fun {
-    padding: 0 25px;
+    padding: 0 20px;
     li {
       margin: 20px 0;
       float: left;
       img {
-        width: 30px;
+        width: 20px;
       }
     }
 

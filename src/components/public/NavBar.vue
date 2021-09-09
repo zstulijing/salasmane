@@ -25,7 +25,7 @@ export default {
 
 <style lang="less" scoped>
 
-  @navBarHeight: 60px;
+  @navBarHeight: 40px;
   
   #bar {
     z-index: 10;
@@ -40,13 +40,13 @@ export default {
     p {
       float: left;
       font-family: Microsoft YaHei;
-      font-size: 24px;
-      line-height: 60px;
+      font-size: 20px;
+      line-height: 40px;
       color: #3C3F41;
     }
     img {
       float: left;
-      width: 40px;
+      width: 20px;
       border: 1px solid #7070702f;
       margin: 9px 40px;
       border-radius: 5px;
@@ -54,23 +54,25 @@ export default {
   }
   .icon {
     float: right;
-    margin: 18px 0;
+    margin: 10px 0;
     img {
-      height: 24px;
+      height: 20px;
       margin-right: 20px;
     }
   }
   .personal {
     float: right;
-    margin: 16px;
+    
     img {
+      margin: 7px 0;
       float: left;
-      width: 28px;
+      width: 25px;
       border-radius: 5px;
     }
     p {
+      margin: 10px 0;
       float: left;
-      line-height: 28px;
+      line-height: 20px;
       color: #575C5F;
       font-size: 16px;
       font-family: Microsoft YaHei;

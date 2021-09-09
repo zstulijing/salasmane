@@ -51,16 +51,15 @@ export default {
   }
   .head {
     img {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
     }
   }
   .text {
-
     border-radius: 10px;
     p {
-      line-height: 50px;
-      font-size: 20px;
+      line-height: 40px;
+      font-size: 16px;
       font-family: 'Segoe UI';
       padding: 0 10px;
     }
@@ -86,7 +85,7 @@ export default {
         top: 15px;
       }
       img {
-        max-width: 500px;
+        max-width: 400px;
         margin: 8px;
         border-radius: 5px;
       }
@@ -112,7 +111,7 @@ export default {
         top: 15px;
       }
       img {
-        max-width: 500px;
+        max-width: 400px;
         margin: 8px;
         border-radius: 5px;
       }
@@ -126,7 +125,7 @@ export default {
         p {
           background-color: rgb(214, 215, 216);
           color: rgb(119, 119, 119);
-          font-size: 16px;
+          font-size: 14px;
           line-height: normal;
           border-radius: 10px;
         }

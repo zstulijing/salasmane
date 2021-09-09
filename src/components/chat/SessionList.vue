@@ -15,11 +15,21 @@
 
         </div>
         <div v-else-if="show[1]">
-          <div class="" v-for="(item, index) in sessionList" :key="index">
-            <img src="" alt="">
-            <p>{{item.title}}</p>
-            <p>{{item.lastInf}}</p>
-            <p>{{item.time}}</p>
+          <div class="briefList clear" v-for="(item, index) in friendList" :key="index">
+            <div v-if="item != null">
+              <div class="briefList_photo">
+                <img :src="getIMG(item.data.data.profile_img)" alt="">
+              </div>
+              <div>
+                <p>{{item.data.data.create_time}}</p>
+                <p>{{item.data.data.messege}}</p>
+              </div>
+              <!-- <div>
+                <p>{{item.newHisTime}}</p>
+              </div> -->
+
+            </div>
+
           </div>
         </div>
         <div v-else-if="show[2]">
@@ -35,31 +45,14 @@
 </template>
 
 <script>
+import {request} from 'network/request.js'
 export default {
   name: 'SessionList',
   data() {
     return {
       show: [false, true, false, false],
       search: '',
-      sessionList: [
-      {
-        title: '好友/客户',
-        lastInf: 'Last information',
-        photo: '',
-        time: '18:21'
-      },
-      {
-        title: '好友/客户',
-        lastInf: 'Last information',
-        photo: '',
-        time: '18:21'
-      },
-      {
-        title: '好友/客户',
-        lastInf: 'Last information',
-        photo: '',
-        time: '18:21'
-      }],
+      sessionList: [],
       friendList: [],
       serviceList: [],
       groupList: [],
@@ -87,17 +80,48 @@ export default {
       } else {
         return {active: false}
       }
+    },
+    getIMG(filename) {
+      return 'http://l423145x35.oicp.vip/file/' + filename
     }
-  }
+  },
+  mounted () {
+    request({
+      method: 'GET',
+      url: 'http://l423145x35.oicp.vip/chat/RecenttalkListBySort',
+      params: {
+        user_id: this.$store.state.profile.id,
+        type: 1
+      }
+    }).then(response => {
+      let mesLength = response.data.data.length
+      this.friendList = new Array(mesLength)
+      let all = []
+      for (let i in response.data.data) {
+        all.push(request({
+          method: 'GET',
+          url: 'http://l423145x35.oicp.vip/chat/getNewHisByRelativeId',
+          params: {
+            type: 1,
+            relative_id: response.data.data[i].imRecenttalk.relative
+          }
+        }))
+     }
+      Promise.all(all).then(response => {
+        this.friendList = response
+      })
+    })
+
+  },
 }
 </script>
 
 <style lang="less" scoped>
 
-  @sessionListWidth: 375px;
+  @sessionListWidth: 300px;
 
   .sessionList {
-    position: fixed;
+    position: absolute;
     height: 100%;
     width: @sessionListWidth;
     border-right: 1px solid #e7e7e7;
@@ -107,8 +131,8 @@ export default {
     input {
       display: block;
       margin: 12px auto;
-      width: 318px;
-      height: 35px;
+      width: 243px;
+      height: 30px;
       background: #7070702c;
       border: 0px;
       border-radius: 10px;
@@ -118,7 +142,7 @@ export default {
       background-image: url(~assets/img/chat/search.png);
       background-size: 18px;
       background-repeat: no-repeat;
-      background-position-x: 110px;
+      background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
       font-size: 18px;
@@ -129,7 +153,7 @@ export default {
       background-image: url(~assets/img/chat/search.png);
       background-size: 18px;
       background-repeat: no-repeat;
-      background-position-x: 110px;
+      background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
       font-size: 18px;
@@ -140,7 +164,7 @@ export default {
       background-image: url(~assets/img/chat/search.png);
       background-size: 18px;
       background-repeat: no-repeat;
-      background-position-x: 110px;
+      background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
       font-size: 18px;
@@ -151,7 +175,7 @@ export default {
       background-image: url(~assets/img/chat/search.png);
       background-size: 18px;
       background-repeat: no-repeat;
-      background-position-x: 110px;
+      background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
       font-size: 18px;
@@ -162,22 +186,32 @@ export default {
     border-top: 1px solid #e7e7e7;
     background-color: #F5F5F5;
     .button {
-      margin: 8px 28px;
+      margin: 8px 10px;
       button {
         padding: 4px 10px;
         float: left;
         outline: none;
         border: none;
         color: #313131;
-        font-size: 18px;
+        font-size: 16px;
         border-radius: 10px;
         background-color: #F5F5F5;
-        margin-right: 19px;
+        margin-right: 7px;
       }
       &>button:last-child {
          margin-right: 0px;
       }
-    }  
+    }
+    .session {
+        .briefList {
+          .briefList_photo {
+            img {
+              width: 50px;
+              height: 50px;
+            }
+          }
+        }
+      }  
   }
   .list .button .active {
     color: #3875C5;

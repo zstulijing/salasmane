@@ -176,6 +176,7 @@ export default {
           this.loginSucceeded = false
         } else if (response.data.code == 200) {
           //登录成功
+          this.$store.commit('setProfile', response.data.data)
           this.$router.push('/chat')
         }
       })
@@ -192,8 +193,9 @@ export default {
           profileImg: ''
         }
       }).then(response => {
+
         let id = response.data.data
-        console.log(id)
+        
       })
     },
     inputPassword() {

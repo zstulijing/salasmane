@@ -8,6 +8,10 @@ let Logon = () => import('views/Logon/Logon.vue')
 
 const routes = [
   {
+    path: '',
+    redirect: '/logon'
+  },
+  {
     path: '/chat',
     name: 'Chat',
     component: Chat

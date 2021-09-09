@@ -22,8 +22,8 @@ export default {
 
 <style lang="less" scoped>
 
-  @sessionListHeight: 375px;
-  @chatTitleHeight: 61px;
+  @sessionListHeight: 300px;
+  @chatTitleHeight: 56px;
   .chatContent {
     padding-left: @sessionListHeight;
   }
@@ -32,7 +32,7 @@ export default {
     height: @chatTitleHeight;
     p {
       font-family: 'Segoe UI';
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 400;
       line-height: 60px;
       margin-left: 30px;

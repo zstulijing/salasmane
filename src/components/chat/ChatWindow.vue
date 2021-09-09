@@ -106,7 +106,6 @@ export default {
       }
     }).then(response => {
       this.records = response.data.data.records
-      console.log(this.records);
     })
   },
 }
@@ -119,15 +118,15 @@ export default {
   .dialogue {
     float: left;
     margin-right: 15px;
-    width: 980px;
+    width: 750px;
 
     border: 1px solid rgba(112, 112, 112, 0.3);
     border-radius: 0px 10px 0px 0px;
     .chatbox {
       box-sizing: border-box;
       padding: 0 45px 0 50px;
-      width: 980px;
-      height: 550px;
+      width: 750px;
+      height: 450px;
       background: rgb(248, 248, 248);
       overflow: auto;
     }
@@ -136,9 +135,9 @@ export default {
       .fun {
         div {
           float: left;
-          margin-right: 25px;
+          margin-right: 23px;
           img {
-            width: 22px;
+            width: 20px;
           }
         }
         &>div:last-child {
@@ -149,7 +148,7 @@ export default {
       textarea {
         padding-top: 10px;
         width: 100%;
-        height: 150px;
+        height: 100px;
         border: none;
         resize: none;
         font-size: 22px;
@@ -157,22 +156,22 @@ export default {
       .button {
         button {
           float: right;
-          width: 100px;
+          width: 80px;
           height: 40px;
           background: #F5F5F5;
           border: 1px solid #707070;
           opacity: 0.5;
-          font-size: 18px;
+          font-size: 16px;
         }
       }
     }
   }
   .information {
     float: left;
-    width: 440px;
+    width: 380px;
     .profile {
       padding: 0 28px;
-      height: 360px;
+      height: 300px;
       background: #FBFBFB;
       border: 1px solid rgba(112, 112, 112, 0.3);
       border-radius: 10px;
@@ -180,14 +179,14 @@ export default {
       .photo {
         img {
           float: left;
-          width: 50px;
-          height: 50px;
+          width: 40px;
+          height: 40px;
           margin: 15px 25px;
         }
         p {
           float: right;
-          font-size: 22px;
-          line-height: 80px;
+          font-size: 20px;
+          line-height: 60px;
           font-family: 'Segoe UI';
           margin-right: 25px;
         }
@@ -198,7 +197,7 @@ export default {
           margin: 14px 0;
           p {
             float: left;
-            font-size: 20px;
+            font-size: 16px;
             font-family: 'Segoe UI';
           } 
           &>p:nth-child(1) {
@@ -209,7 +208,7 @@ export default {
       }
     }
     .manage {
-      height: 420px;
+      height: 320px;
       background: #FBFBFB;
       border: 1px solid rgba(112, 112, 112, 0.3);
       border-radius: 10px;
