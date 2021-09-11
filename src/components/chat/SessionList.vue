@@ -15,19 +15,18 @@
 
         </div>
         <div v-else-if="show[1]">
-          <div class="briefList clear" v-for="(item, index) in friendList" :key="index">
-            <div v-if="item != null">
+          <div class="briefList" v-for="(item, index) in friendList" :key="index">
+            <div v-if="item != null" class="clear" @click="chatContent(index)">
               <div class="briefList_photo">
                 <img :src="getIMG(item.data.data.profile_img)" alt="">
               </div>
-              <div>
-                <p>{{item.data.data.create_time}}</p>
-                <p>{{item.data.data.messege}}</p>
+              <div class="briefList_talk">
+                <p>{{item.data.data.talk_name}}</p>
+                <p>{{item.data.data.messege | cutMessage}}</p>
               </div>
-              <!-- <div>
-                <p>{{item.newHisTime}}</p>
-              </div> -->
-
+              <div class="briefList_time">
+                <p>{{item.data.data.create_time | showDate}}</p>
+              </div>
             </div>
 
           </div>
@@ -48,6 +47,33 @@
 import {request} from 'network/request.js'
 export default {
   name: 'SessionList',
+  filters: {
+    showDate(date) {
+      let YMD = date.split('T')[0].split('-')
+  
+      let now = new Date().toLocaleDateString().split('/')
+      let num = 0; 
+      for (let i = 0; i < YMD.length; i++){
+        if (parseInt(YMD[i]) == parseInt(now[i])) {
+          num ++;
+        } 
+      }
+      if (num == YMD.length) {
+        return date.split('T')[1]
+      } else if (parseInt(YMD[0]) != parseInt(now[0])){
+        return date.split('T')[0].split('-')[0]
+      } else {
+        return date.split('T')[0].split('-')[1] + '-' + date.split('T')[0].split('-')[2]
+      }
+    },
+    cutMessage(message) {
+      if (message.length >= 13) {
+        return message.substring(0, 13) + '...'
+      } else {
+        return message
+      }
+    }
+  },
   data() {
     return {
       show: [false, true, false, false],
@@ -56,12 +82,13 @@ export default {
       friendList: [],
       serviceList: [],
       groupList: [],
-      chooseNow: 1
+      chooseNow: 1,
+      relativeId: []
     }
   },
   methods: {
     submit(search) {
-      console.log(search)   
+      
     },
     choose(num) {
       this.chooseNow = num
@@ -83,6 +110,20 @@ export default {
     },
     getIMG(filename) {
       return 'http://l423145x35.oicp.vip/file/' + filename
+    },
+    chatContent(index) {
+      // console.log(this.$route.path.indexOf(this.friendList[index].data.data.link_user));
+      if (this.$route.path.indexOf(this.friendList[index].data.data.link_user) == -1) {
+
+        this.$store.commit('setOtherPart', {
+          talkName: this.friendList[index].data.data.talk_name,
+          linkUser: this.friendList[index].data.data.link_user,
+          profileImg: this.friendList[index].data.data.profile_img,
+          relative: this.relativeId[index]
+        })
+        
+        this.$router.push('/chat/' + this.friendList[index].data.data.link_user)
+      }
     }
   },
   mounted () {
@@ -96,8 +137,11 @@ export default {
     }).then(response => {
       let mesLength = response.data.data.length
       this.friendList = new Array(mesLength)
+      
+
       let all = []
       for (let i in response.data.data) {
+        this.relativeId[i] = response.data.data[i].imRecenttalk.relative
         all.push(request({
           method: 'GET',
           url: 'http://l423145x35.oicp.vip/chat/getNewHisByRelativeId',
@@ -109,6 +153,7 @@ export default {
      }
       Promise.all(all).then(response => {
         this.friendList = response
+
       })
     })
 
@@ -145,7 +190,7 @@ export default {
       background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       color: #707070;
     }
     input:-moz-placeholder { 
@@ -156,7 +201,7 @@ export default {
       background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       color: #707070;
     } 
     input::-moz-placeholder { 
@@ -167,7 +212,7 @@ export default {
       background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       color: #707070;
     } 
     input:-ms-input-placeholder { 
@@ -178,7 +223,7 @@ export default {
       background-position-x: 80px;
       background-position-y: 5px;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       color: #707070;
     }
   }
@@ -204,11 +249,30 @@ export default {
     }
     .session {
         .briefList {
+          cursor: pointer;
+          height: 64px;
           .briefList_photo {
+            float: left;
             img {
-              width: 50px;
-              height: 50px;
+              width: 40px;
+              height: 40px;
+              border: 2px solid #707070;
+              border-radius: 5px;
+              margin: 10px;
             }
+          }
+          .briefList_talk {
+            float: left;
+            margin-top: 10px;
+            &>p:nth-child(2) {
+              font-size: 12px;
+              margin-top: 10px;
+            }
+  
+          }
+          .briefList_time {
+            float: right;
+            margin: 20px 10px 0 0;
           }
         }
       }  

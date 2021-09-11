@@ -3,12 +3,31 @@
     <div class="dialogue">
       <div class="chatbox clearfix">
         <div v-for="(record, index) in records" :key="index">
-          <chat-record :sendDirection="judgeDirection(record)">
-            <img src="" alt="" slot="head">
-            <p v-if="record.systemPrompt" slot="system">{{record.systemPrompt}}</p>
-            <p slot="text" v-else-if="record.content">{{record.content}}</p>
-            <img v-else-if="record.savePath" :src="imgURL(record.savePath)" alt="" slot="emoji">
-          </chat-record>
+          <div v-if="record != null">
+
+            <div v-if="judgeDirection(record) == 1">
+              <chat-record-left>
+                <img :src="imgURL(profileImg)" alt="" slot="head">
+                <p v-if="record.content" slot="text">{{record.content}}</p>
+                <img v-else-if="record.savePath" :src="imgURL(record.savePath)" alt="" slot="emoji">
+              </chat-record-left>
+            </div>
+
+            <div v-if="judgeDirection(record) == 2">
+              <chat-record-right>
+                <img :src="imgURL($store.state.profile.profileImg)" alt="" slot="head">
+                <p v-if="record.content" slot="text">{{record.content}}</p>
+                <img v-else-if="record.savePath" :src="imgURL(record.savePath)" alt="" slot="emoji">
+              </chat-record-right>
+            </div>
+
+            <div v-if="judgeDirection(record) == 3">
+              <chat-record-center>
+                <p v-if="record.systemPrompt" slot="system">{{record.systemPrompt}}</p>
+              </chat-record-center>
+            </div>
+
+          </div>
         </div>
       </div>
       <div class="send">
@@ -27,37 +46,89 @@
     <div class="information">
       <div class="profile">
         <div class="photo clear">
-          <img src="" alt="">
-          <p>用户名</p>
+          <img :src="imgURL($store.state.otherPart.profileImg)" alt="">
+          <p>{{message.name}}</p>
         </div>
         <div class="personInformation">
           <div class="inf clear">
             <p>ID:</p>
-            <p></p>
+            <p>{{message.id}}</p>
           </div>
           <div class="inf clear">
             <p>手机:</p>
-            <p></p>
+            <p>{{message.mobile}}</p>
           </div>
           <div class="inf clear">
             <p>备注:</p>
-            <p></p>
+            <p>无</p>
           </div>
           <div class="inf clear">
             <p>分组:</p>
-            <p></p>
+            <p>默认分组</p>
           </div>
           <div class="inf clear">
             <p>性别:</p>
-            <p></p>
+            <p>{{message.gender}}</p>
           </div>
-          <div class="inf clear">
-            <p>标签:</p>
-            <p></p>
+          <div class="inf clear tag">
+            <p class="first">标签:</p>
+            <p>计算机科学与技术</p>
+            <p>智能科学与技术</p>
+
+            <!-- <p>{{message.tag}}</p> -->
           </div>
         </div>
       </div>
       <div class="manage">
+        <div class="clear bar">
+          <img src="~assets/img/chat/nodisturb.png" alt="">
+          <div class="border clear">
+            <p>消息免打扰</p>
+            <div class="newButton">
+              <new-button></new-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="clear bar">
+          <img src="~assets/img/chat/topping.png" alt="">
+          <div class="border clear">
+            <p>置顶聊天</p>
+            <div class="newButton">
+              <new-button></new-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="clear bar">
+          <img src="~assets/img/chat/blacklist.png" alt="">
+          <div class="border clear">
+            <p>加入黑名单</p>
+            <div class="newButton">
+              <new-button></new-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="clear bar">
+          <img src="~assets/img/chat/disturb.png" alt="">
+          <div class="border clear">
+            <p>设置AI提醒时间</p>
+            <div class="newButton">
+              <new-button></new-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="clear bar">
+          <img src="~assets/img/chat/remarks.png" alt="">
+          <div class="border clear">
+            <p>添加备注：</p>
+            <div class="newButton">
+              <new-button></new-button>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -66,16 +137,34 @@
 
 <script>
 import {request} from 'network/request.js'
-import ChatRecord from 'components/chat/ChatRecord.vue'
+import NewButton from 'components/chat/NewButton.vue'
+
+import ChatRecordLeft from 'components/chat/ChatRecordLeft.vue'
+import ChatRecordRight from 'components/chat/ChatRecordRight.vue'
+import ChatRecordCenter from 'components/chat/ChatRecordCenter.vue'
+
 export default {
   name: 'ChatWindow',
   components: {
-    ChatRecord
+    NewButton,
+    ChatRecordLeft,
+    ChatRecordRight,
+    ChatRecordCenter
+  },
+  props: {
+    profileImg: {
+      type: String
+    }
   },
   data() {
     return {
       records: [],
-      myId: '28343434343434'
+      myId: this.$store.state.profile.id,
+      source_id: this.$route.params.id,
+      myPhoto: this.$store.state.profile.profileImg,
+      message: {},
+      isLeft: true,
+      isRight: true
     }
   },
   methods: {
@@ -84,30 +173,66 @@ export default {
     },
     judgeDirection(record) {
       if (record.type == 0) { //系统消息
-        return 'center'
+        this.isLeft = false
+        this.isRight = false
+        return 3
+
       }
       else if (record.type == 1 || record.type == 2) { //文字消息
         if (record.sendId == this.myId) {
-          return 'right'
+          this.isLeft = false
+          this.isRight = true
+          return 2
+
         } else {
-          return 'left'
+          this.isLeft = true
+          this.isRight = false
+          return 1
+
         }
       }
     }
   },
-  mounted () {
+  mounted() {
+
     request({
       method: 'GET',
       url: 'http://l423145x35.oicp.vip/chat/getThreeChatInfo',
       params: {
-        source_id: 273487384738748,
+        source_id: this.source_id,
         type: 1,
-        me_id: 28343434343434
+        me_id: this.myId
       }
     }).then(response => {
       this.records = response.data.data.records
     })
-  },
+
+    request({
+      method: 'GET',
+      url: 'http://l423145x35.oicp.vip/chatOne/otherIsEmployeeInChat',
+      params: {
+        relative_id: this.$store.state.otherPart.relative
+      }
+    }).then(response => {
+
+      if (response.data.data) {
+        //员工
+      } else {
+        //客户
+        request({
+          method: 'GET',
+          url: 'http://l423145x35.oicp.vip/chatOne/getManInfo',
+          params: {
+            people_id: this.$store.state.otherPart.linkUser,
+            roleType: 1,
+            firm_id: this.$store.state.company.firmId
+          }
+        }).then(response => {
+          this.message = response.data.data
+        })
+      }
+    })
+  }
 }
 </script>
 
@@ -194,7 +319,8 @@ export default {
       }
       .personInformation {
         .inf {
-          margin: 14px 0;
+
+          line-height: 28px;
           p {
             float: left;
             font-size: 16px;
@@ -203,6 +329,14 @@ export default {
           &>p:nth-child(1) {
             width: 50px;
             text-align: right;
+            margin-right: 20px;
+          }
+        }
+        .tag {
+          &>p:not(.first) {
+            background-color: #1492e631;
+            padding: 1px 10px;
+            border-radius: 10px;
           }
         }
       }
@@ -212,6 +346,25 @@ export default {
       background: #FBFBFB;
       border: 1px solid rgba(112, 112, 112, 0.3);
       border-radius: 10px;
+      .bar {
+        margin: 15px 20px;
+        .border {
+          margin-left: 40px;
+          border-bottom: 1px solid #70707065;
+          padding-bottom: 10px;
+        }
+        img {
+          float: left;
+          width: 20px;
+        }
+        p {
+          line-height: 20px;
+          float: left;
+        }
+        .newButton {
+          float: right;
+        }
+      }
     }
   }
 

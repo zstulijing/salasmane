@@ -5,8 +5,8 @@
       <p>信易萃学</p>
     </div>
     <div class="personal">
-      <img src="~assets/img/salesman/salesman.png" alt="">
-      <p>业务人员</p>
+      <img :src="getIMG(profile.profileImg)" alt="">
+      <p>{{profile.username}}</p>
     </div>
     <div class="icon">
       <img src="~assets/img/narbar/search.png" alt="">
@@ -19,7 +19,17 @@
 
 <script>
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  data() {
+    return {
+      profile: this.$store.state.profile
+    }
+  },
+  methods: {
+    getIMG(filename) {
+      return 'http://l423145x35.oicp.vip/file/' + filename
+    }
+  }
 }
 </script>
 
@@ -68,6 +78,7 @@ export default {
       float: left;
       width: 25px;
       border-radius: 5px;
+      margin-right: 10px;
     }
     p {
       margin: 10px 0;

@@ -1,7 +1,7 @@
 <template>
   <div class="funbar">
     <div class="photo clear">
-      <img src="~assets/img/salesman/salesman.png" alt="">
+      <img :src="getIMG(profile.profileImg)" alt="">
     </div>
     <div class="fun clear">
       <ul>
@@ -17,7 +17,17 @@
 
 <script>
 export default {
-  name: 'FunBar'
+  name: 'FunBar',
+  data() {
+    return {
+      profile: this.$store.state.profile
+    }
+  },
+  methods: {
+    getIMG(filename) {
+      return 'http://l423145x35.oicp.vip/file/' + filename
+    }
+  }
 }
 </script>
 

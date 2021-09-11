@@ -2,8 +2,8 @@
   <div class="chat">
     <session-list></session-list>
     <div class="chatContent">
-      <div class="chatTitle"><p>好友/客户</p></div>
-      <chat-window></chat-window>
+      <div class="chatTitle"><p>{{$store.state.otherPart.talkName}}</p></div>
+      <chat-window :key="key" :profileImg="$store.state.otherPart.profileImg"></chat-window>
     </div>
   </div>  
 </template>
@@ -16,6 +16,11 @@ export default {
   components: {
     SessionList,
     ChatWindow
+  },
+  computed: {
+    key() {
+      return this.$route.path + Math.random() 
+    }
   }
 }
 </script>

@@ -177,7 +177,17 @@ export default {
         } else if (response.data.code == 200) {
           //登录成功
           this.$store.commit('setProfile', response.data.data)
-          this.$router.push('/chat')
+          request({
+            method: 'GET',
+            url: 'http://l423145x35.oicp.vip/bs/isCompanyUser',
+            params: {
+              people_id: response.data.data.id
+            }
+          }).then(response => {
+            this.$store.commit('setCompany', response.data.data)
+            this.$router.push('/chat')
+          })
+
         }
       })
     },
