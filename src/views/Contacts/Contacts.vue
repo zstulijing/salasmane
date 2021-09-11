@@ -1,0 +1,31 @@
+<template>
+  <div>
+    <nav-bar></nav-bar>
+    <div class="contentArea">
+      <fun-bar></fun-bar>
+      <Content>
+        <contacts-content></contacts-content>
+      </Content>
+    </div>
+  </div>
+</template>
+
+<script>
+import NavBar from 'components/public/NavBar.vue'
+import FunBar from 'components/public/FunBar.vue'
+import Content from 'components/public/Content.vue'
+import ContactsContent from './ContactsContent.vue'
+export default {
+  name: 'Contacts',
+  components: {
+    FunBar,
+    NavBar,
+    Content,
+    ContactsContent
+  },
+}
+</script>
+
+<style lang="less" scoped>
+
+</style>

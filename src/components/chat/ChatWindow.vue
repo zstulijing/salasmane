@@ -60,7 +60,7 @@
           </div>
           <div class="inf clear">
             <p>备注:</p>
-            <p>无</p>
+            <p>{{message.remark}}</p>
           </div>
           <div class="inf clear">
             <p>分组:</p>
@@ -74,7 +74,7 @@
             <p class="first">标签:</p>
             <p>计算机科学与技术</p>
             <p>智能科学与技术</p>
-
+            <p>+</p>
             <!-- <p>{{message.tag}}</p> -->
           </div>
         </div>
@@ -120,16 +120,15 @@
           </div>
         </div>
 
-        <div class="clear bar">
+        <div class="clear bar textarea">
           <img src="~assets/img/chat/remarks.png" alt="">
-          <div class="border clear">
-            <p>添加备注：</p>
-            <div class="newButton">
-              <new-button></new-button>
-            </div>
-          </div>
+          <p>添加备注：</p>
+          <textarea name="" id="" cols="30" rows="10"></textarea>
         </div>
 
+        <div class="delete">
+          <button>删除好友</button>
+        </div>
       </div>
     </div>
   </div>
@@ -194,44 +193,46 @@ export default {
     }
   },
   mounted() {
+    if (this.source_id != null) {
+      request({
+        method: 'GET',
+        url: 'http://l423145x35.oicp.vip/chat/getThreeChatInfo',
+        params: {
+          source_id: this.source_id,
+          type: 1,
+          me_id: this.myId
+        }
+      }).then(response => {
+        this.records = response.data.data.records
+      })
+  
+      request({
+        method: 'GET',
+        url: 'http://l423145x35.oicp.vip/chatOne/otherIsEmployeeInChat',
+        params: {
+          relative_id: this.$store.state.otherPart.relative
+        }
+      }).then(response => {
+  
+        if (response.data.data) {
+          //员工
+        } else {
+          //客户
+          request({
+            method: 'GET',
+            url: 'http://l423145x35.oicp.vip/chatOne/getManInfo',
+            params: {
+              people_id: this.$store.state.otherPart.linkUser,
+              roleType: 1,
+              firm_id: this.$store.state.company.firmId
+            }
+          }).then(response => {
+            this.message = response.data.data
+          })
+        }
+      })
 
-    request({
-      method: 'GET',
-      url: 'http://l423145x35.oicp.vip/chat/getThreeChatInfo',
-      params: {
-        source_id: this.source_id,
-        type: 1,
-        me_id: this.myId
-      }
-    }).then(response => {
-      this.records = response.data.data.records
-    })
-
-    request({
-      method: 'GET',
-      url: 'http://l423145x35.oicp.vip/chatOne/otherIsEmployeeInChat',
-      params: {
-        relative_id: this.$store.state.otherPart.relative
-      }
-    }).then(response => {
-
-      if (response.data.data) {
-        //员工
-      } else {
-        //客户
-        request({
-          method: 'GET',
-          url: 'http://l423145x35.oicp.vip/chatOne/getManInfo',
-          params: {
-            people_id: this.$store.state.otherPart.linkUser,
-            roleType: 1,
-            firm_id: this.$store.state.company.firmId
-          }
-        }).then(response => {
-          this.message = response.data.data
-        })
-      }
-    })
+    }
   }
 }
 </script>
@@ -256,7 +257,7 @@ export default {
       overflow: auto;
     }
     .send {
-      padding: 20px 30px 15px 30px;
+      padding: 20px 30px 5px 30px;
       .fun {
         div {
           float: left;
@@ -296,7 +297,7 @@ export default {
     width: 380px;
     .profile {
       padding: 0 28px;
-      height: 300px;
+      height: 280px;
       background: #FBFBFB;
       border: 1px solid rgba(112, 112, 112, 0.3);
       border-radius: 10px;
@@ -320,10 +321,10 @@ export default {
       .personInformation {
         .inf {
 
-          line-height: 28px;
+          line-height: 26px;
           p {
             float: left;
-            font-size: 16px;
+            font-size: 14px;
             font-family: 'Segoe UI';
           } 
           &>p:nth-child(1) {
@@ -337,32 +338,66 @@ export default {
             background-color: #1492e631;
             padding: 1px 10px;
             border-radius: 10px;
+            margin-right: 10px;
+          }
+          &>p:last-child {
+            cursor: pointer;
+
           }
         }
       }
     }
     .manage {
-      height: 320px;
+      height: 350px;
       background: #FBFBFB;
       border: 1px solid rgba(112, 112, 112, 0.3);
       border-radius: 10px;
       .bar {
-        margin: 15px 20px;
+        margin: 10px 20px;
         .border {
-          margin-left: 40px;
-          border-bottom: 1px solid #70707065;
-          padding-bottom: 10px;
+          margin-left: 30px;
+          border-bottom: 1px solid rgba(112, 112, 112, 0.3);
+          padding-bottom: 5px;
         }
         img {
           float: left;
-          width: 20px;
+          width: 16px;
         }
         p {
-          line-height: 20px;
+          font-size: 14px;
+          line-height: 16px;
           float: left;
         }
         .newButton {
           float: right;
+        }
+      }
+      .textarea {
+        p {
+          margin-left: 18px;
+        }
+        textarea {
+          margin-top: 10px;
+          resize: none;
+          width: 330px;
+          height: 94px;
+          background: #FFFFFF;
+          border: 1px solid rgba(112, 112, 112, 0.3);
+          border-radius: 10px;
+        }
+      }
+      .delete {
+        width: 300px;
+        margin: 0 auto;
+
+        button {
+          width: 300px;
+          height: 40px;
+          border: 1px solid rgba(112, 112, 112, 0.1);
+          border-radius: 10px;
+          font-size: 16px;
+          font-family: 'Segoe UI';
+          color: #FF3737;
         }
       }
     }

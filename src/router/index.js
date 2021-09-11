@@ -5,6 +5,7 @@ Vue.use(VueRouter)
 
 let Chat = () => import('views/Chat/Chat.vue')
 let Logon = () => import('views/Logon/Logon.vue')
+let Contacts = () => import('views/Contacts/Contacts.vue')
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: '/logon',
     name: 'Logon',
     component: Logon
+  },
+  {
+    path: '/contacts',
+    name: 'Contacts',
+    component: Contacts
   }
 ]
 

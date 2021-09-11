@@ -5,11 +5,11 @@
     </div>
     <div class="fun clear">
       <ul>
-        <li><img src="~assets/img/funbar/message.png" alt=""></li>
-        <li><img src="~assets/img/funbar/contacts.png" alt=""></li>
-        <li><img src="~assets/img/funbar/document.png" alt=""></li>
-        <li><img src="~assets/img/funbar/collection.png" alt=""></li>
-        <li><img src="~assets/img/funbar/setting.png" alt=""></li>
+        <li><img src="~assets/img/funbar/message.png" alt="" @click="toMessage()"></li>
+        <li><img src="~assets/img/funbar/contacts.png" alt="" @click="toContacts()"></li>
+        <li><img src="~assets/img/funbar/document.png" alt="" @click="toDocument()"></li>
+        <li><img src="~assets/img/funbar/collection.png" alt="" @click="toCollection()"></li>
+        <li><img src="~assets/img/funbar/setting.png" alt="" @click="toSetting()"></li>
       </ul>
     </div>
   </div>
@@ -26,6 +26,21 @@ export default {
   methods: {
     getIMG(filename) {
       return 'http://l423145x35.oicp.vip/file/' + filename
+    },
+    toMessage() {
+      this.$router.push('/chat')
+    },
+    toContacts() {
+      this.$router.push('/contacts')
+    },
+    toDocument() {
+
+    },
+    toCollection() {
+
+    },
+    toSetting() {
+
     }
   }
 }
@@ -54,6 +69,7 @@ export default {
       height: 40px;
       border-radius: 5px;
       float: left;
+      
     }
   }
 
@@ -64,6 +80,7 @@ export default {
       float: left;
       img {
         width: 20px;
+        cursor: pointer;
       }
     }
 

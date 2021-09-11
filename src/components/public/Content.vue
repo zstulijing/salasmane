@@ -15,9 +15,9 @@ export default {
   @funBarWidth: 60px;
 
   .content {
-
-    margin-top: @navBarHeight;
-    margin-left: @funBarWidth;
-
+    position: absolute;
+    top: @navBarHeight;
+    left: @funBarWidth;
+    bottom: 0px;
   }
 </style>

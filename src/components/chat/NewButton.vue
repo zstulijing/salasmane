@@ -26,8 +26,9 @@ export default {
   methods: {
     ballMove() {
       this.isChoose = !this.isChoose
-      // let ball = document.getElementById('ball');
-      let ball = this.$ref.ball
+
+      let ball = this.$refs.ball
+      
       if (parseInt(getComputedStyle(ball, null)['left']) <= 3) {
         let num = setInterval(() => {
           if (parseInt(getComputedStyle(ball, null)['left']) >= 18) {

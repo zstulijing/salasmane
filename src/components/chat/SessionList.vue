@@ -166,6 +166,7 @@ export default {
   @sessionListWidth: 300px;
 
   .sessionList {
+    overflow: auto;
     position: absolute;
     height: 100%;
     width: @sessionListWidth;
