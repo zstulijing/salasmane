@@ -1,9 +1,15 @@
 <template>
-  <div class="chat">
-    <session-list></session-list>
-    <div class="chatContent">
-      <div class="chatTitle"><p>{{$store.state.otherPart.talkName}}</p></div>
-      <chat-window :key="key" :profileImg="$store.state.otherPart.profileImg"></chat-window>
+  <div class="chat clear">
+    <session-list class="chatLeft"></session-list>
+    <div class="chatRight">
+      <div class="chatHome" v-if="isHome">
+          <img src="~assets/img/salesman/transparent.png" alt="">
+      </div>
+
+      <div class="chatContent" v-else>
+        <div class="chatTitle"><p>{{$store.state.otherPart.talkName}}</p></div>
+        <chat-window :key="key" :profileImg="$store.state.otherPart.profileImg"></chat-window>
+      </div>
     </div>
   </div>  
 </template>
@@ -20,6 +26,13 @@ export default {
   computed: {
     key() {
       return this.$route.path + Math.random() 
+    },
+    isHome() {
+      if (this.$route.path == '/chat') {
+        return true
+      } else {
+        return false
+      }
     }
   }
 }
@@ -27,10 +40,20 @@ export default {
 
 <style lang="less" scoped>
 
-  @sessionListHeight: 300px;
+  @sessionListWidth: 300px;
   @chatTitleHeight: 56px;
-  .chatContent {
-    padding-left: @sessionListHeight;
+
+  .chatLeft {
+    width: @sessionListWidth;
+  }
+  .chatRight {
+    margin-left: @sessionListWidth;
+    .chatHome {
+      background-color: rgb(250, 250, 250);
+      img {
+        width: 200px;
+      }
+    }
   }
 
   .chatTitle {

@@ -19,7 +19,7 @@ const routes = [
   },
   {
     path: '/chat/:id',
-    name: 'Chat',
+    name: 'ChatId',
     component: Chat
   },
   {
@@ -30,6 +30,11 @@ const routes = [
   {
     path: '/contacts',
     name: 'Contacts',
+    component: Contacts
+  },
+  {
+    path: '/contacts/:id',
+    name: 'ContactsId',
     component: Contacts
   }
 ]

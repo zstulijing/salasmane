@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="body">
     <nav-bar></nav-bar>
-    <div class="contentArea">
+    <div class="contentArea clear">
       <fun-bar></fun-bar>
       <Content>
         <contacts-content></contacts-content>

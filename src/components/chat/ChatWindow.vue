@@ -72,10 +72,8 @@
           </div>
           <div class="inf clear tag">
             <p class="first">标签:</p>
-            <p>计算机科学与技术</p>
-            <p>智能科学与技术</p>
-            <p>+</p>
-            <!-- <p>{{message.tag}}</p> -->
+            <p v-for="(item, index) in message.tag" :key="index">{{item.key}}</p>
+            <p @click="addTag()">+</p>
           </div>
         </div>
       </div>
@@ -190,6 +188,9 @@ export default {
 
         }
       }
+    },
+    addTag() {
+      
     }
   },
   mounted() {
@@ -213,10 +214,25 @@ export default {
           relative_id: this.$store.state.otherPart.relative
         }
       }).then(response => {
-  
+
         if (response.data.data) {
+          console.log(1);
           //员工
+          request({
+            method: 'GET',
+            url: 'http://l423145x35.oicp.vip/chatOne/getManInfo',
+            params: {
+              people_id: this.$store.state.otherPart.linkUser,
+              roleType: 2,
+              firm_id: this.$store.state.company.firmId,
+              me_id: this.$store.state.profile.id
+            }
+          }).then(response => {
+            this.message = response.data.data
+          })
+
         } else {
+          console.log(2);
           //客户
           request({
             method: 'GET',
@@ -224,7 +240,8 @@ export default {
             params: {
               people_id: this.$store.state.otherPart.linkUser,
               roleType: 1,
-              firm_id: this.$store.state.company.firmId
+              firm_id: this.$store.state.company.firmId,
+              me_id: this.$store.state.profile.id
             }
           }).then(response => {
             this.message = response.data.data

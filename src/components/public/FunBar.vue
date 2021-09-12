@@ -48,15 +48,13 @@ export default {
 
 <style lang="less" scoped>
 
-  @navBarHeight: 40px;
   @funBarWidth: 60px;
 
   .funbar {
     width: @funBarWidth;
-    height: 100%;
+    height: calc(100vh);
     position: fixed;
     left: 0;
-    top: @navBarHeight;
     z-index: 9;
     background-color: #3875C5;
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-bar></nav-bar>
-    <div class="contentArea">
+    <div class="contentArea clear">
       <fun-bar></fun-bar>
       <Content>
         <chat-content></chat-content>
@@ -33,5 +33,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+  @navBarHeight: 40px;
+  .contentArea {
+    margin-top: @navBarHeight;
+  }
 </style>
