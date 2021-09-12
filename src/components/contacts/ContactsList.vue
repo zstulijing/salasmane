@@ -8,7 +8,7 @@
         <button>通讯录管理</button>
       </div>
       <div class="cFun">
-        <div class="newFriend clear">
+        <div class="newFriend clear" @click="newFriend()">
           <img src="~assets/img/contacts/newFriend.png" alt="">
           <p>新朋友</p>
         </div>
@@ -81,6 +81,9 @@ export default {
         })
         this.$router.push('/contacts/' + this.contacts[index].peer_id)
       }
+    },
+    newFriend() {
+      this.$router.push('/contacts/newfriend')
     }
   },
   data() {
@@ -121,7 +124,7 @@ export default {
   .contactsList {
     overflow: auto;
     position: absolute;
-    height: 100%;
+    height: calc(100vh - 40px);
     width: @contactsListWidth;
     border-right: 1px solid #e7e7e7;
   }
@@ -210,6 +213,9 @@ export default {
           float: left;
           line-height: 50px;
         }
+      }
+      .newFriend {
+        cursor: pointer;
       }
     }
     .grouping {

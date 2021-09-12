@@ -167,7 +167,7 @@ export default {
   .sessionList {
     overflow: auto;
     position: absolute;
-    height: 100%;
+    height: calc(100vh - 40px);
     width: @sessionListWidth;
     border-right: 1px solid #e7e7e7;
   }

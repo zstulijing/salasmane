@@ -52,7 +52,7 @@ export default {
 
   .funbar {
     width: @funBarWidth;
-    height: calc(100vh);
+    height: calc(100vh - 40px);
     position: fixed;
     left: 0;
     z-index: 9;

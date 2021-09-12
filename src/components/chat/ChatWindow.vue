@@ -275,6 +275,7 @@ export default {
     }
     .send {
       padding: 20px 30px 5px 30px;
+      background-color: #fafafa;
       .fun {
         div {
           float: left;
@@ -295,6 +296,7 @@ export default {
         border: none;
         resize: none;
         font-size: 22px;
+        background-color: #fafafa;
       }
       .button {
         button {

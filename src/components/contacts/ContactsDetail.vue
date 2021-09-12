@@ -107,20 +107,22 @@ export default {
 
 <style lang="less" scoped>
   .contactsDetail {
-    width: 710px;
+    margin: 0 auto;
+    padding-top: 100px;
+    width: 600px;
     .cHeader {
       padding: 20px;
       img {
-        width: 80px;
+        width: 60px;
         float: left;
         border-radius: 5px;
       }
       p {
         float: right;
-        font-size: 30px;
+        font-size: 24px;
         font-family: 'Segoe UI';
         font-weight: bold;
-        line-height: 80px;
+        line-height: 60px;
 
       }
     }
@@ -136,7 +138,7 @@ export default {
         margin: 10px 0;
         p {
           float: left;
-          font-size: 20px;
+          font-size: 18px;
           font-family: 'Segoe UI';
         } 
         &>p:nth-child(1) {
@@ -160,14 +162,15 @@ export default {
     }
 
     .cButton {
-      width: 160px;
+      width: 140px;
       margin: 20px auto;
       button {
-        font-size: 22px;
-        width: 160px;
-        height: 40px;
+        font-size: 20px;
+        width: 140px;
+        height: 30px;
         background: #3875c580;
         border-radius: 5px;
+        border: none;
       }
     }
   }

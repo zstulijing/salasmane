@@ -36,16 +36,19 @@ export default {
 <style lang="less" scoped>
 
   @contactsListWidth: 300px;
+  
   .cRight {
-    margin-left: @contactsListWidth;
-    position: relative;
-  }
-  .cHome {
+     margin-left: @contactsListWidth;
+    height: calc(100vh - 40px);
+    box-sizing: border-box;
     background-color: rgb(250, 250, 250);
-    img {
+    .cHome {
+      padding-top: 250px;
       margin: 0 auto;
-      padding-top: 200px;
       width: 200px;
+      img {
+        width: 200px;
+      }
     }
   }
 </style>

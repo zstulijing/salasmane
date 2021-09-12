@@ -43,13 +43,15 @@ export default {
   @sessionListWidth: 300px;
   @chatTitleHeight: 56px;
 
-  .chatLeft {
-    width: @sessionListWidth;
-  }
   .chatRight {
     margin-left: @sessionListWidth;
+    height: calc(100vh - 40px);
+    box-sizing: border-box;
+    background-color: rgb(250, 250, 250);
     .chatHome {
-      background-color: rgb(250, 250, 250);
+      padding-top: 250px;
+      margin: 0 auto;
+      width: 200px;
       img {
         width: 200px;
       }
