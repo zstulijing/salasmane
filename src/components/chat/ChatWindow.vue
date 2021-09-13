@@ -38,8 +38,8 @@
           <div><img src="~assets/img/chat/commonWords.png" alt=""></div>
           <div><img src="~assets/img/chat/history.png" alt=""></div>
         </div>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
-        <div class="button clear"><button>发送(S)</button></div>
+        <textarea name="" id="" cols="30" rows="10" v-model="sendMessage" @keyup.enter="send()"></textarea>
+        <div class="button clear"><button @click="send()">发送(S)</button></div>
       </div>
     </div>
 
@@ -161,7 +161,8 @@ export default {
       myPhoto: this.$store.state.profile.profileImg,
       message: {},
       isLeft: true,
-      isRight: true
+      isRight: true,
+      sendMessage: ''
     }
   },
   methods: {
@@ -191,6 +192,35 @@ export default {
     },
     addTag() {
       
+    },
+    send() {
+      console.log(this.sendMessage);
+      request({
+        method: 'GET',
+        url: 'http://l423145x35.oicp.vip/chat/sendInfoInChat',
+        params: {
+          sendId: this.$store.state.profile.id,
+          receiveId: this.$store.state.otherPart.linkUser,
+          content: this.sendMessage,
+          type: 1,
+          firmId: this.$store.state.company.firmId
+        }
+      }).then(response => {
+        this.sendMessage = ''
+        this.$emit('send', item)
+        request({
+          method: 'GET',
+          url: 'http://l423145x35.oicp.vip/chat/getThreeChatInfo',
+          params: {
+            source_id: this.source_id,
+            type: 1,
+            me_id: this.myId
+          }
+        }).then(response => {
+          this.records = response.data.data.records
+        })
+      })
+
     }
   },
   mounted() {
