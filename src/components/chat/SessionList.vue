@@ -204,7 +204,12 @@ export default {
           me_id: this.$store.state.profile.id
         }
       }).then(response => {
-        if (response.data.data.flag == 'true') {
+        if (response.data.data.flag == true) {
+          for(let i of response.data.data.relation_list) {
+            if (i == this.$store.state.otherPart.relative) {
+              this.$emit('update', '')
+            }
+          }
           this.update()
         }
       })

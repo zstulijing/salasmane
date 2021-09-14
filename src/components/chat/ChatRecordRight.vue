@@ -46,6 +46,7 @@ export default {
     .textarea {
       border-radius: 10px;
       background-color: #12B7F5;
+      max-width: 560px;
       p {
         line-height: 40px;
         font-size: 16px;

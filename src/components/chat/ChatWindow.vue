@@ -181,6 +181,28 @@ export default {
         this.sendMessage = quickReply.quickReply
         this.send()
       }
+    },
+    update() {
+      request({
+        method: 'GET',
+        url: 'http://l423145x35.oicp.vip/chatOne/hasReadHistory',
+        params: {
+          relative_id: this.$store.state.otherPart.relative,
+          type: 1
+        }
+      }).then(response => {
+        request({
+          method: 'GET',
+          url: 'http://l423145x35.oicp.vip/chat/getThreeChatInfo',
+          params: {
+            source_id: this.source_id,
+            type: 1,
+            me_id: this.myId
+          }
+        }).then(response => {
+          this.records = response.data.data.records
+        })
+      })
     }
   },
   mounted() {
