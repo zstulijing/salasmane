@@ -1,7 +1,7 @@
 <template>
   <div class="window clear">
     <div class="dialogue">
-      <div class="chatbox clearfix">
+      <div class="chatbox clearfix" ref="chatbox">
         <div v-for="(record, index) in records" :key="index">
           <div v-if="record != null">
 
@@ -43,110 +43,45 @@
       </div>
     </div>
 
-    <div class="information">
-      <div class="profile">
-        <div class="photo clear">
-          <img :src="imgURL($store.state.otherPart.profileImg)" alt="">
-          <p>{{message.name}}</p>
+    <div class="chatFunction">
+      <div class="cFuntion clear">
+        <div @click="userMessage()">
+          <p :class="{active: isUserMessage}">用户信息</p>
         </div>
-        <div class="personInformation">
-          <div class="inf clear">
-            <p>ID:</p>
-            <p>{{message.id}}</p>
-          </div>
-          <div class="inf clear">
-            <p>手机:</p>
-            <p>{{message.mobile}}</p>
-          </div>
-          <div class="inf clear">
-            <p>备注:</p>
-            <p>{{message.remark}}</p>
-          </div>
-          <div class="inf clear">
-            <p>分组:</p>
-            <p>默认分组</p>
-          </div>
-          <div class="inf clear">
-            <p>性别:</p>
-            <p>{{message.gender}}</p>
-          </div>
-          <div class="inf clear tag">
-            <p class="first">标签:</p>
-            <p v-for="(item, index) in message.tag" :key="index">{{item.key}}</p>
-            <p @click="addTag()">+</p>
-          </div>
+        <div @click="knowledgeBase()">
+          <p :class="{active: isKnowledgeBase}">知识库搜索</p></div>
+        <div @click="quickReply()">
+          <p :class="{active: isQuickReply}">快捷回复</p>
         </div>
       </div>
-      <div class="manage">
-        <div class="clear bar">
-          <img src="~assets/img/chat/nodisturb.png" alt="">
-          <div class="border clear">
-            <p>消息免打扰</p>
-            <div class="newButton">
-              <new-button></new-button>
-            </div>
-          </div>
-        </div>
 
-        <div class="clear bar">
-          <img src="~assets/img/chat/topping.png" alt="">
-          <div class="border clear">
-            <p>置顶聊天</p>
-            <div class="newButton">
-              <new-button></new-button>
-            </div>
-          </div>
-        </div>
-
-        <div class="clear bar">
-          <img src="~assets/img/chat/blacklist.png" alt="">
-          <div class="border clear">
-            <p>加入黑名单</p>
-            <div class="newButton">
-              <new-button></new-button>
-            </div>
-          </div>
-        </div>
-
-        <div class="clear bar">
-          <img src="~assets/img/chat/disturb.png" alt="">
-          <div class="border clear">
-            <p>设置AI提醒时间</p>
-            <div class="newButton">
-              <new-button></new-button>
-            </div>
-          </div>
-        </div>
-
-        <div class="clear bar textarea">
-          <img src="~assets/img/chat/remarks.png" alt="">
-          <p>添加备注：</p>
-          <textarea name="" id="" cols="30" rows="10"></textarea>
-        </div>
-
-        <div class="delete">
-          <button>删除好友</button>
-        </div>
-      </div>
+      <chat-information v-if="isUserMessage"></chat-information>
+      <knowledge-base v-if="isKnowledgeBase"></knowledge-base>
+      <quick-reply v-if="isQuickReply" @quickReplySend="quickReplySend($event)"></quick-reply>
     </div>
+
   </div>
 </template>
 
 <script>
 import {request} from 'network/request.js'
-import NewButton from 'components/chat/NewButton.vue'
 
 import ChatRecordLeft from 'components/chat/ChatRecordLeft.vue'
 import ChatRecordRight from 'components/chat/ChatRecordRight.vue'
 import ChatRecordCenter from 'components/chat/ChatRecordCenter.vue'
+import ChatInformation from 'components/chat/ChatInformation.vue'
+import knowledgeBase from 'components/chat/KnowledgeBase.vue'
+import QuickReply from 'components/chat/QuickReply.vue'
 
 export default {
   name: 'ChatWindow',
   components: {
-    NewButton,
     ChatRecordLeft,
     ChatRecordRight,
-    ChatRecordCenter
+    ChatRecordCenter,
+    ChatInformation,
+    knowledgeBase,
+    QuickReply
   },
   props: {
     profileImg: {
@@ -162,9 +97,13 @@ export default {
       message: {},
       isLeft: true,
       isRight: true,
-      sendMessage: ''
+      sendMessage: '',
+      isUserMessage: true,
+      isKnowledgeBase: false,
+      isQuickReply: false
     }
   },
+
   methods: {
     imgURL(fileName) {
       return 'http://l423145x35.oicp.vip/file/' + fileName
@@ -194,20 +133,20 @@ export default {
       
     },
     send() {
-      console.log(this.sendMessage);
+      let sendMessage = this.sendMessage
+      this.sendMessage = ''
       request({
         method: 'GET',
         url: 'http://l423145x35.oicp.vip/chat/sendInfoInChat',
         params: {
           sendId: this.$store.state.profile.id,
           receiveId: this.$store.state.otherPart.linkUser,
-          content: this.sendMessage,
+          content: sendMessage,
           type: 1,
           firmId: this.$store.state.company.firmId
         }
       }).then(response => {
-        this.sendMessage = ''
-        this.$emit('send', item)
+        this.$emit('send')
         request({
           method: 'GET',
           url: 'http://l423145x35.oicp.vip/chat/getThreeChatInfo',
@@ -221,6 +160,27 @@ export default {
         })
       })
 
+    },
+    userMessage() {
+      this.isUserMessage = true,
+      this.isKnowledgeBase = false,
+      this.isQuickReply = false
+    },
+    knowledgeBase() {
+      this.isUserMessage = false,
+      this.isKnowledgeBase = true,
+      this.isQuickReply = false
+    },
+    quickReply() {
+      this.isUserMessage = false,
+      this.isKnowledgeBase = false,
+      this.isQuickReply = true
+    },
+    quickReplySend(quickReply) {
+      if (quickReply.type == 1) {
+        this.sendMessage = quickReply.quickReply
+        this.send()
+      }
     }
   },
   mounted() {
@@ -236,50 +196,10 @@ export default {
       }).then(response => {
         this.records = response.data.data.records
       })
-  
-      request({
-        method: 'GET',
-        url: 'http://l423145x35.oicp.vip/chatOne/otherIsEmployeeInChat',
-        params: {
-          relative_id: this.$store.state.otherPart.relative
-        }
-      }).then(response => {
-
-        if (response.data.data) {
-          console.log(1);
-          //员工
-          request({
-            method: 'GET',
-            url: 'http://l423145x35.oicp.vip/chatOne/getManInfo',
-            params: {
-              people_id: this.$store.state.otherPart.linkUser,
-              roleType: 2,
-              firm_id: this.$store.state.company.firmId,
-              me_id: this.$store.state.profile.id
-            }
-          }).then(response => {
-            this.message = response.data.data
-          })
-
-        } else {
-          console.log(2);
-          //客户
-          request({
-            method: 'GET',
-            url: 'http://l423145x35.oicp.vip/chatOne/getManInfo',
-            params: {
-              people_id: this.$store.state.otherPart.linkUser,
-              roleType: 1,
-              firm_id: this.$store.state.company.firmId,
-              me_id: this.$store.state.profile.id
-            }
-          }).then(response => {
-            this.message = response.data.data
-          })
-        }
-      })
-
     }
+  },
+  updated() {
+    this.$refs.chatbox.scrollTop = this.$refs.chatbox.scrollHeight
   }
 }
 </script>
@@ -291,8 +211,8 @@ export default {
   .dialogue {
     float: left;
     margin-right: 15px;
-    width: 750px;
-
+    height: calc(100vh - 100px);
+    box-sizing: border-box;
     border: 1px solid rgba(112, 112, 112, 0.3);
     border-radius: 0px 10px 0px 0px;
     .chatbox {
@@ -341,115 +261,41 @@ export default {
       }
     }
   }
-  .information {
+  .chatFunction {
+    height: calc(100vh - 100px);
+    overflow: auto;
+    box-sizing: border-box;
     float: left;
-    width: 380px;
-    .profile {
-      padding: 0 28px;
-      height: 280px;
-      background: #FBFBFB;
-      border: 1px solid rgba(112, 112, 112, 0.3);
-      border-radius: 10px;
-      margin-bottom: 15px;
-      .photo {
-        img {
-          float: left;
-          width: 40px;
-          height: 40px;
-          margin: 15px 25px;
-        }
+    width: 395px;
+    border: 1px solid rgba(112, 112, 112, 0.3);
+    border-radius: 10px;
+    .cFuntion {
+      &>div {
+        text-align: center;
+        float: left;
+        width: 125px;
+        height: 20px;
+        font-size: 16px;
+        font-family: 'Segoe UI';
+        font-weight: bold;
+        padding: 10px 0;
+        color: #000000;
+        opacity: 1;
+        border-bottom: 1px solid #c8c8c8;
         p {
-          float: right;
-          font-size: 20px;
-          line-height: 60px;
-          font-family: 'Segoe UI';
-          margin-right: 25px;
+          cursor: pointer;
         }
-        border-bottom: 1px solid rgba(112, 112, 112, 0.3);
-      }
-      .personInformation {
-        .inf {
-
-          line-height: 26px;
-          p {
-            float: left;
-            font-size: 14px;
-            font-family: 'Segoe UI';
-          } 
-          &>p:nth-child(1) {
-            width: 50px;
-            text-align: right;
-            margin-right: 20px;
-          }
-        }
-        .tag {
-          &>p:not(.first) {
-            background-color: #1492e631;
-            padding: 1px 10px;
-            border-radius: 10px;
-            margin-right: 10px;
-          }
-          &>p:last-child {
-            cursor: pointer;
-
-          }
+        .active {
+          color: #3875C5;
         }
       }
-    }
-    .manage {
-      height: 350px;
-      background: #FBFBFB;
-      border: 1px solid rgba(112, 112, 112, 0.3);
-      border-radius: 10px;
-      .bar {
-        margin: 10px 20px;
-        .border {
-          margin-left: 30px;
-          border-bottom: 1px solid rgba(112, 112, 112, 0.3);
-          padding-bottom: 5px;
-        }
-        img {
-          float: left;
-          width: 16px;
-        }
+      &>div:nth-child(2) {
         p {
-          font-size: 14px;
-          line-height: 16px;
-          float: left;
-        }
-        .newButton {
-          float: right;
-        }
-      }
-      .textarea {
-        p {
-          margin-left: 18px;
-        }
-        textarea {
-          margin-top: 10px;
-          resize: none;
-          width: 330px;
-          height: 94px;
-          background: #FFFFFF;
-          border: 1px solid rgba(112, 112, 112, 0.3);
-          border-radius: 10px;
-        }
-      }
-      .delete {
-        width: 300px;
-        margin: 0 auto;
-
-        button {
-          width: 300px;
-          height: 40px;
-          border: 1px solid rgba(112, 112, 112, 0.1);
-          border-radius: 10px;
-          font-size: 16px;
-          font-family: 'Segoe UI';
-          color: #FF3737;
+          border-left: 1px solid #c8c8c8;
+          border-right: 1px solid #c8c8c8;
         }
       }
     }
   }
-
+  
 </style>

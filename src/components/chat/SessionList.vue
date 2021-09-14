@@ -17,6 +17,8 @@
         <div v-else-if="show[1]">
           <div class="briefList" v-for="(item, index) in friendList" :key="index">
             <div v-if="item != null" class="clear" @click="chatContent(index)">
+
+              <p class="newMessage" v-if="item.data.data.news_length != 0">{{item.data.data.news_length}}</p>
               <div class="briefList_photo">
                 <img :src="getIMG(item.data.data.profile_img)" alt="">
               </div>
@@ -59,7 +61,7 @@ export default {
         } 
       }
       if (num == YMD.length) {
-        return date.split('T')[1]
+        return date.split('T')[1].split(':')[0] + ':' +  date.split('T')[1].split(':')[1]
       } else if (parseInt(YMD[0]) != parseInt(now[0])){
         return date.split('T')[0].split('-')[0]
       } else {
@@ -121,8 +123,47 @@ export default {
           profileImg: this.friendList[index].data.data.profile_img,
           relative: this.relativeId[index]
         })
-        this.$router.push('/chat/' + this.friendList[index].data.data.link_user)
+        request({
+          method: 'GET',
+          url: 'http://l423145x35.oicp.vip/chatOne/hasReadHistory',
+          params: {
+            relative_id: this.relativeId[index],
+            type: 1
+          }
+        }).then(response => {
+          this.friendList[index].data.data.news_length = 0
+          this.$router.push('/chat/' + this.friendList[index].data.data.link_user)
+        })
+
+
       }
+    },
+    update() {
+      request({
+        method: 'GET',
+        url: 'http://l423145x35.oicp.vip/chat/RecenttalkListBySort',
+        params: {
+          user_id: this.$store.state.profile.id,
+          type: 1
+        }
+      }).then(response => {
+        let mesLength = response.data.data.length
+        let all = []
+        for (let i in response.data.data) {
+          this.relativeId[i] = response.data.data[i].imRecenttalk.relative
+          all.push(request({
+            method: 'GET',
+            url: 'http://l423145x35.oicp.vip/chat/getNewHisByRelativeId',
+            params: {
+              type: 1,
+              relative_id: response.data.data[i].imRecenttalk.relative
+            }
+          }))
+        }
+        Promise.all(all).then(response => {
+          this.friendList = response
+        })
+      })
     }
   },
   mounted () {
@@ -136,8 +177,6 @@ export default {
     }).then(response => {
       let mesLength = response.data.data.length
       this.friendList = new Array(mesLength)
-      
-
       let all = []
       for (let i in response.data.data) {
         this.relativeId[i] = response.data.data[i].imRecenttalk.relative
@@ -156,7 +195,21 @@ export default {
       })
     })
 
-  },
+
+    let num = setInterval(() => {
+      request({
+        method: 'GET',
+        url: 'http://l423145x35.oicp.vip/chatOne/getMesBool',
+        params: {
+          me_id: this.$store.state.profile.id
+        }
+      }).then(response => {
+        if (response.data.data.flag == 'true') {
+          this.update()
+        }
+      })
+    }, 100);
+  }
 }
 </script>
 
@@ -248,7 +301,24 @@ export default {
       }
     }
     .session {
+
       .briefList {
+        &>div:nth-child(1) {
+          position: relative;
+          .newMessage {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            left: 45px;
+            top: 1px;
+            background-color: rgb(250, 81, 81);
+            text-align: center;
+            line-height: 15px;
+            color: #fff;
+            font-size: 10px;
+          }
+        }
         cursor: pointer;
         height: 64px;
         .briefList_photo {
@@ -273,6 +343,8 @@ export default {
         .briefList_time {
           float: right;
           margin: 20px 10px 0 0;
+          color: #707070;
+          font-size: 10px;
         }
       }
     }  

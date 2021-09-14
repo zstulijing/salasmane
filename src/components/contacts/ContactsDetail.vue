@@ -40,7 +40,7 @@
 
 
     <div class="cButton">
-      <button>发送消息</button>
+      <button @click="toSendMessage()">发送消息</button>
     </div>
   </div>
 </template>
@@ -57,6 +57,9 @@ export default {
   methods: {
     imgURL(fileName) {
       return 'http://l423145x35.oicp.vip/file/' + fileName
+    },
+    toSendMessage() {
+      this.$router.push('/chat/' + this.$store.state.otherPart.linkUser)
     }
   },
   mounted () {

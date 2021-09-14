@@ -1,6 +1,6 @@
 <template>
   <div class="chat clear">
-    <session-list class="chatLeft"></session-list>
+    <session-list class="chatLeft" ref="sessionList"></session-list>
     <div class="chatRight">
       <div class="chatHome" v-if="isHome">
           <img src="~assets/img/salesman/transparent.png" alt="">
@@ -8,7 +8,7 @@
 
       <div class="chatContent" v-else>
         <div class="chatTitle"><p>{{$store.state.otherPart.talkName}}</p></div>
-        <chat-window :key="key" :profileImg="$store.state.otherPart.profileImg"></chat-window>
+        <chat-window :key="key" :profileImg="$store.state.otherPart.profileImg" @send="send()"></chat-window>
       </div>
     </div>
   </div>  
@@ -22,6 +22,11 @@ export default {
   components: {
     SessionList,
     ChatWindow
+  },
+  methods: {
+    send() {
+      this.$refs.sessionList.update()
+    }
   },
   computed: {
     key() {
